@@ -1,70 +1,73 @@
 <?php
 
+// Example 1
+// class CoffeeMaker
+// {
+//     public function brew()
+//     {
+//         var_dump('Brewing the coffee');
+//     }
+// }
 
-class Team 
+// class SpecialtyCoffeeMaker extends CoffeeMaker
+// {
+//     public function brewLatte()
+//     {
+//         var_dump('Brewing a latte');
+//     }
+// }
+
+// (new SpecialtyCoffeeMaker())->brew();
+
+
+
+
+
+// Example 2
+
+class Collection
 {
-    protected $name;
-    protected $members = [];
+    protected array $items;
 
-    public function __construct($name, $members = [])
+    public function __construct(array $items)
     {
-        $this->name = $name;
-        $this->members[] = $members;
-    }
-    // nice way to start new class object
-    public static function start(...$params)
-    {
-        // var_dump($params);
-        return new static(...$params);
+        $this->items = $items;
     }
 
-    public function name()
+    public function sum($key)
     {
-        return $this->name;
+        // return array_sum(array_map(function($items) use ($key) {
+        //     return $items->$key;
+        // }, $this->items));
+        return array_sum(array_column($this->items, $key));
     }
-
-    public function members()
-    {
-        return $this->members;
-    }
-
-    public function add($name)
-    {
-        $this->members[] = $name;
-    }
-
-    public function cancel()
-    {
-        
-    }
-
-    public function manager()
-    {
-        
-    }
-
 }
 
-class Member
+class Video 
 {
-    protected $name;
+    public $title;
+    public $length;
 
-    public function __construct($name)
+    public function __construct($title,$length)
     {
-        $this->name = $name;
-    }
-
-    public function lastView()
-    {
-        
+        $this->title = $title;
+        $this->length = $length;
     }
 }
-$ismail = Team::start('Ismail', [
-    new Member('Norhan'),
-    new Member('Rashed'),
+
+class VideosCollection extends Collection
+{
+    public function length()
+    { 
+        return $this->sum('length');
+    }
+}
+
+$videoCollection = new VideosCollection([
+    new Video('Some video 1', 100),
+    new Video('Some video 2', 200),
+    new Video('Some video 3', 300),
 ]);
 
-// $ismail->add('Norhan');
-// $ismail->add('Rashed');
 
-var_dump($ismail->members());
+var_dump($videoCollection->length());
