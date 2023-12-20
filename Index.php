@@ -1,73 +1,47 @@
 <?php
 
-// Example 1
-// class CoffeeMaker
-// {
-//     public function brew()
-//     {
-//         var_dump('Brewing the coffee');
-//     }
-// }
-
-// class SpecialtyCoffeeMaker extends CoffeeMaker
-// {
-//     public function brewLatte()
-//     {
-//         var_dump('Brewing a latte');
-//     }
-// }
-
-// (new SpecialtyCoffeeMaker())->brew();
-
-
-
-
-
-// Example 2
-
-class Collection
+abstract class AchievementType 
 {
-    protected array $items;
-
-    public function __construct(array $items)
+    public function name()
     {
-        $this->items = $items;
+        $class = (new ReflectionClass($this))->getShortName();
+
+        return trim(preg_replace('/[A-Z]/', ' $0', $class));
     }
 
-    public function sum($key)
+    public function icon()
     {
-        // return array_sum(array_map(function($items) use ($key) {
-        //     return $items->$key;
-        // }, $this->items));
-        return array_sum(array_column($this->items, $key));
+        return strtolower(str_replace(' ', '-', $this->name())).'.png';
+    }
+
+    abstract public function qualifier($user);
+}
+
+class FirstThousandPoints extends AchievementType
+{
+    public function qualifier($user)
+    {
+
     }
 }
 
-class Video 
+class FirstBestAnswer extends AchievementType
 {
-    public $title;
-    public $length;
-
-    public function __construct($title,$length)
+    public function qualifier($user)
     {
-        $this->title = $title;
-        $this->length = $length;
+
     }
 }
 
-class VideosCollection extends Collection
+class ReachTop50 extends AchievementType
 {
-    public function length()
-    { 
-        return $this->sum('length');
+    public function qualifier($user)
+    {
+
     }
 }
 
-$videoCollection = new VideosCollection([
-    new Video('Some video 1', 100),
-    new Video('Some video 2', 200),
-    new Video('Some video 3', 300),
-]);
+$achievement = new ReachTop50();
 
 
-var_dump($videoCollection->length());
+var_dump($achievement);
